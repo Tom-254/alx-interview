@@ -1,0 +1,22 @@
+#!/bin/bash
+allThreads=("0-pascal_triangle.py")
+
+mkdir -p "0x01-lockboxes"
+
+for t in ${allThreads[@]}; do
+
+    if [[ $t == *".py"* ]]; then
+        echo -e "#!/usr/bin/python3\n" > "./0x01-lockboxes/$t" && chmod +x "./0x01-lockboxes/$t"
+    else
+        # echo -e "#!/usr/bin/node\n" > "./0x01-lockboxes/$t"
+        touch "./0x01-lockboxes/$t"
+    fi
+done
+
+echo -e "# ALX Programme Project: 0x01. Lockboxes" > "./0x01-lockboxes/README.md"
+
+echo -e "#!/bin/bash\ngit add . && git commit -m '0x01. Lockboxes' && git push"  > "./0x01-lockboxes/correction" && chmod +x "./0x01-lockboxes/correction"
+
+cp "../alx-higher_level_programming/0x05-python-exceptions/clean_up_corrections" "./0x01-lockboxes/"
+
+cd ./0x01-lockboxes
