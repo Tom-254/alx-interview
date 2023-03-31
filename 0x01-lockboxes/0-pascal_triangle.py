@@ -3,6 +3,9 @@
 
 
 def canUnlockAll(boxes):
+    """
+    Check if box can be unlocked
+    """
     if len(boxes) is 0 or type(boxes) is not list:
         return False
     locked = {box: True for box in range(1, len(boxes))}
@@ -16,6 +19,9 @@ def canUnlockAll(boxes):
 
 
 def unlock(boxes, locked, keys):
+    """
+        Recursively unlock the boxes locked
+    """
     for key in keys:
         try:
             if locked[key]:
