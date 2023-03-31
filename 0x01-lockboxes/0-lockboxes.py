@@ -1,31 +1,19 @@
 #!/usr/bin/python3
-""" Unlock boxes """
+"""Determines if all the boxes can be opened.
+"""
 
 
 def canUnlockAll(boxes):
+    """determines if all the boxes can be opened.
     """
-    Check if box can be unlocked
-    """
-    if len(boxes) == 0 or type(boxes) is not list:
-        return False
-    locked = {box: True for box in range(1, len(boxes))}
-    locked.update({0: False})
-    keys = boxes[0]
-    unlock(boxes, locked, keys)
-
-    if True in locked.values():
-        return False
-    return True
-
-
-def unlock(boxes, locked, keys):
-    """
-        Recursively unlock the boxes locked
-    """
-    for key in keys:
-        try:
-            if locked[key]:
-                locked[key] = False
-                unlock(boxes, locked, boxes[key])
-        except KeyError:
-            pass
+    n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
