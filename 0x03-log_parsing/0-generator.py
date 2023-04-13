@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-'''A script that generates random HTTP request logs.
-'''
+"""This script generates random HTTP request logs.
+"""
 import random
 import sys
 import datetime
