@@ -3,6 +3,7 @@
 UTF-8 validation module.
 """
 
+
 def validUTF8(data):
     """
     Determines if the given data set represents a valid UTF-8 encoding.
@@ -26,7 +27,8 @@ def validUTF8(data):
             return False
         else:
             for j in range(1, num_bytes):
-                if i + j >= len(data) or (data[i+j] & 0b11000000) != 0b10000000:
+                if (i + j >= len(data)
+                        or (data[i+j] & 0b11000000) != 0b10000000):
                     return False
             i += num_bytes
     return True
