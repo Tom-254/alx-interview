@@ -1,15 +1,12 @@
 #!/usr/bin/python3
+"""
+UTF-8 validation module.
+"""
 
 
 def validUTF8(data):
     """
-    Determines if the given data set represents a valid UTF-8 encoding.
-
-    Parameters:
-    data (list of int): The data set to check.
-
-    Returns:
-    bool: True if data is a valid UTF-8 encoding, else False.
+    Returns True if data is a valid UTF-8 encoding, else False.
     """
     i = 0
     while i < len(data):
