@@ -3,39 +3,30 @@
 UTF-8 validation module.
 """
 
-
 def validUTF8(data):
     """
-    Check if the given data is valid UTF-8 encoded.
+    Determines if the given data set represents a valid UTF-8 encoding.
 
     Parameters:
-    data (bytes or str): The data to check.
+    data (list of int): The data set to check.
 
     Returns:
-    bool: True if the data is valid UTF-8 encoded, False otherwise.
+    bool: True if data is a valid UTF-8 encoding, else False.
     """
     i = 0
     while i < len(data):
-        if (data[i] & 0b10000000) == 0b00000000:
+        num_bytes = 0
+        mask = 0b10000000
+        while mask & data[i]:
+            num_bytes += 1
+            mask >>= 1
+        if num_bytes == 0:
             i += 1
-        elif (data[i] & 0b11100000) == 0b11000000:
-            if (data[i+1] & 0b11000000) == 0b10000000:
-                i += 2
-            else:
-                return False
-        elif (data[i] & 0b11110000) == 0b11100000:
-            if (data[i+1] & 0b11000000) == 0b10000000 and \
-                    (data[i+2] & 0b11000000) == 0b10000000:
-                i += 3
-            else:
-                return False
-        elif (data[i] & 0b11111000) == 0b11110000:
-            if (data[i+1] & 0b11000000) == 0b10000000 and \
-                (data[i+2] & 0b11000000) == 0b10000000 and \
-                    (data[i+3] & 0b11000000) == 0b10000000:
-                i += 4
-            else:
-                return False
-        else:
+        elif num_bytes == 1 or num_bytes > 4:
             return False
+        else:
+            for j in range(1, num_bytes):
+                if i + j >= len(data) or (data[i+j] & 0b11000000) != 0b10000000:
+                    return False
+            i += num_bytes
     return True
