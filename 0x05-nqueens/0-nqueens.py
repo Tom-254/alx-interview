@@ -12,9 +12,9 @@ where each solution is a list of (row, column) pairs.
 Functions:
     is_valid_position(board, row, col):
         Check if a position is valid for placing a queen on the board.
-    place_next_queen(board, row):
+    put_next_queen(board, row):
         Try to place a queen on the next row of the board at a valid position.
-    solve_nqueens(board, solutions=[]):
+    find_nqueens_solution(board, solutions=[]):
         Solve the N-Queens problem for a given
         board and append the solutions to
         the given list.
@@ -30,15 +30,7 @@ import sys
 
 
 def is_valid_position(board, row, col):
-    """Check if a position is valid for placing a queen on the board.
-
-    Args:
-        board (list[list[int]]): The current state of the board.
-        row (int): The row to check.
-        col (int): The column to check.
-
-    Returns:
-        bool: True if the position is valid, False otherwise.
+    """check for validity of the queens position
     """
     b_size = len(board)
     if sum(board[row]) or sum([board[i][col] for i in range(b_size)]) != 0:
@@ -53,16 +45,8 @@ def is_valid_position(board, row, col):
     return True
 
 
-def place_next_queen(board, row):
-    """Place a queen on the next row of the board at a valid position.
-
-    Args:
-        board (list[list[int]]): The current state of the board.
-        row (int): The current row to place the queen.
-
-    Returns:
-        bool: True if a valid position was found and a queen was placed, False
-              otherwise.
+def put_next_queen(board, row):
+    """Makes sure a queen is placed at a valid position
     """
     st, end = 0, len(board)
     if sum(board[row]) == 1:
@@ -76,54 +60,58 @@ def place_next_queen(board, row):
     return False
 
 
-def solve_nqueens(board, solutions=[]):
-    """Solve the N-Queens problem for a given board.
+def find_nqueens_solution(board, solutions=[]):
+    """Solves the nqueens problem
 
     Args:
-        board (list[list[int]]): The current state of the board.
-        solutions (list[list[tuple[int, int]]], optional):
-        The list of solutions.
-            Defaults to [].
-
-    Returns:
-        list[list[tuple[int, int]]]: The list of solutions.
+        n (int): size of board
     """
-    b_size = len(board)
-    if sum([sum(row) for row in board]) == b_size:
-        solution = [(i, row.index(1)) for i, row in enumerate(board)]
-        solutions.append(solution)
-        return solutions
+    n = len(board)
+    row = 0
+    while row < n:
+        if put_next_queen(board, row):
+            row += 1
+        else:
+            if row - 1 < 0:
+                break
+            row -= 1
+        if row == n:
+            solutions.append([[row, board[row].index(1)] for row in range(n)])
+            row -= 1
 
-    for i in range(b_size):
-        if place_next_queen(board, i):
-            solve_nqueens(board, solutions)
-            board[i] = [0 for col in range(b_size)]
+    if row == 0:
+        return
 
-    return solutions
+    solutions.append([[row, board[row].index(1)] for row in range(n)])
+    idx = board[0].index(1)
+    if idx > -1:
+        board = [[0 for _ in range(n)] for row in range(n)]
+        board[0][idx] = 1
+        find_nqueens_solution(board, solutions)
 
 
 def find_solutions(n):
-    """Run the N-Queens solver for a given board size.
-
-    Args:
-        n (int): The size of the board.
-
-    Returns:
-        list[list[tuple[int, int]]]: The list of solutions.
+    """Find each solution and prints them
     """
-    if n < 1:
-        print("Please enter a positive integer.")
-        return
-
     board = [[0 for col in range(n)] for row in range(n)]
-    solutions = solve_nqueens(board)
-    print(f"Found {len(solutions)} solution(s):\n")
-    for i, solution in enumerate(solutions):
-        print(f"Solution {i+1}: {solution}\n")
-
-    return solutions
+    solutions = []
+    find_nqueens_solution(board, solutions)
+    for row in solutions:
+        print(row)
 
 
-if __name__ == "__main__":
-    n = int(sys.argv[1]) if len(sys.argv) > 1 else 8
-    find_solutions(n)
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+
+    try:
+        n = int(sys.argv[1])
+        if n < 4:
+            print('N must be at least 4')
+            sys.exit(1)
+        find_solutions(n)
+
+    except ValueError:
+        print('N must be a number')
+        sys.exit(1)
