@@ -1,108 +1,113 @@
 #!/usr/bin/python3
-"""A program that solves the N-Queens puzzle.
-
-The N-Queens puzzle is the challenge of placing N non-attacking queens on an
-N×N chessboard.
-
-Usage:
-    python nqueens.py N
-
-where N must be an integer greater or equal to 4.
-
-If the user called the program with the wrong number of arguments, print Usage:
-nqueens N, followed by a new line, and exit with the status 1.
-
-If N is not an integer, print N must be a number, followed by a new line, and
-exit with the status 1.
-
-If N is smaller than 4, print N must be at least 4, followed by a new line,
-and exit with the status 1.
-
-The program should return an array of every possible solution to the problem.
-"""
-
+"""This module solves the N queens puzzle."""
 import sys
 
 
-def nqueens(n):
-    """Solve the N-Queens puzzle and return an
-    array of every possible solution.
+def isdigit(n):
+    """checks if a str is a digit"""
+    for c in n:
+        if not (ord(c) >= 48 and ord(c) <= 57):
+            return False
+    return True
 
-    Args:
-        n (int): The size of the board and the number of queens to place.
 
-    Raises:
-        SystemExit: If N is not an integer, or if N is smaller than 4.
+def getSolutions(board):
+    """get all solutions from board"""
+    solution = []
+    for row in range(len(board)):
+        for col in range(len(board[row])):
+            if board[row][col] == 1:
+                solution.append([row, col])
+    return solution
 
-    Returns:
-        List[List[int]]: A list of every possible
-        solution to the N-Queens puzzle.
-    """
-    # Check that n is an integer greater or equal to 4
-    if not isinstance(n, int):
+
+def optimalSolution(solutions):
+    """returns the optional solution from all possible solutions"""
+    optimals = []
+    optimal = solutions[0]
+
+    for solution in solutions:
+        if len(solution) > len(optimal):
+            optimal = solution
+            optimals = [solution]
+        elif len(solution) == len(optimal):
+            optimals.append(solution)
+    return optimals
+
+
+def restrict(board, row, col):
+    """restict areas covered by queen"""
+
+    # horizontal
+    for i in range(len(board[row])):
+        if board[row][i] == 0:
+            board[row][i] = -1
+
+    # vertical
+    for i in board:
+        if i[col] == 0:
+            i[col] = -1
+
+    # right diagnoal
+    j = col
+    for i in range(row, len(board)):
+        if j < len(board):
+            if board[i][j] == 0:
+                board[i][j] = -1
+        j += 1
+
+    # left diagonal
+    j = col
+    for i in range(row, len(board)):
+        if j >= 0:
+            if board[i][j] == 0:
+                board[i][j] = -1
+        j -= 1
+
+
+def placeQueen(board, row):
+    """place queen on a given row"""
+    for col, d in enumerate(board[row]):
+        if d == 0:
+            board[row][col] = 1
+            restrict(board, row, col)
+            break
+
+
+def nQueens(board):
+    """solves the nqueens problem"""
+    for row in range(len(board)):
+        placeQueen(board, row)
+
+
+def main():
+    """Program entry point"""
+    argc = len(sys.argv)
+
+    if argc != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+
+    N = sys.argv[1]
+    if not isdigit(N):
         print("N must be a number")
         sys.exit(1)
+
+    n = int(N)
     if n < 4:
         print("N must be at least 4")
         sys.exit(1)
 
-    # Initialize the board
-    board = [['.' for _ in range(n)] for _ in range(n)]
     solutions = []
-
-    # Recursive function to place queens
-    def place_queen(row, col):
-        """Recursively place queens on the board.
-
-        Args:
-            row (int): The row to place the queen in.
-            col (int): The column to place the queen in.
-        """
-        # Check if this position is attacked by any previous queens
-        for i in range(row):
-            if board[i][col] == 'Q':
-                return False
-            if col - row + i >= 0 and board[i][col - row + i] == 'Q':
-                return False
-            if col + row - i < n and board[i][col + row - i] == 'Q':
-                return False
-
-        # Place the queen
-        board[row][col] = 'Q'
-
-        # If this is the last row, add the solution to the list
-        if row == n - 1:
-            solution = []
-            for i in range(n):
-                for j in range(n):
-                    if board[i][j] == 'Q':
-                        solution.append([i, j])
-            solutions.append(solution)
-        else:
-            # Try placing a queen in the next row
-            for i in range(n):
-                place_queen(row + 1, i)
-
-        # Remove the queen
-        board[row][col] = '.'
-
-    # Try placing a queen in each column of the first row
     for i in range(n):
-        place_queen(0, i)
+        board = [[0 for col in range(0, n)] for row in range(0, n)]
+        board[0][i] = 1
+        restrict(board, 0, i)
+        nQueens(board)
+        solutions.append(getSolutions(board))
+    for optimal in optimalSolution(solutions):
+        print(optimal)
 
-    return solutions
 
-
-if len(sys.argv) != 2:
-    print("Usage: nqueens N")
-    sys.exit(1)
-
-try:
-    n = int(sys.argv[1])
-except ValueError:
-    print("N must be a number")
-    sys.exit(1)
-
-solutions = nqueens(n)
-for solution in solutions:
-    print(solution)
+if __name__ == "__main__":
+    main()
