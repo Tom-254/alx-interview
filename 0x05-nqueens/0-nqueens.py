@@ -93,18 +93,16 @@ def nqueens(n):
     return solutions
 
 
-if __name__ == '__main__':
-    # Check that the program was called with the right arguments
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
+if len(sys.argv) != 2:
+    print("Usage: nqueens N")
+    sys.exit(1)
 
-    try:
-        n = int(sys.argv[1])
-    except ValueError:
-        print("N must be a number")
-        sys.exit(1)
+try:
+    n = int(sys.argv[1])
+except ValueError:
+    print("N must be a number")
+    sys.exit(1)
 
-    solutions = nqueens(n)
-    for solution in solutions:
-        print(solution)
+solutions = nqueens(n)
+for solution in solutions:
+    print(solution)
