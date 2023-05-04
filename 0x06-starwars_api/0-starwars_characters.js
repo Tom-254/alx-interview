@@ -20,3 +20,4 @@ get(`https://swapi-api.alx-tools.com/api/films/${movieId}/`)
   .then(responses => responses.map(response => response.name))
   .then(names => names.forEach(name => console.log(name)))
   .catch(error => console.error(error));
+  
