@@ -1,22 +1,22 @@
 #!/bin/bash
-allThreads=("0-pascal_triangle.py")
+allThreads=("0-making_change.py")
 
-mkdir -p "0x01-lockboxes"
+mkdir -p "0x08-making_change"
 
 for t in ${allThreads[@]}; do
 
     if [[ $t == *".py"* ]]; then
-        echo -e "#!/usr/bin/python3\n" > "./0x01-lockboxes/$t" && chmod +x "./0x01-lockboxes/$t"
+        echo -e "#!/usr/bin/env python3\n" > "./0x08-making_change/$t" && chmod +x "./0x08-making_change/$t"
     else
-        # echo -e "#!/usr/bin/node\n" > "./0x01-lockboxes/$t"
-        touch "./0x01-lockboxes/$t"
+        echo -e "#!/usr/bin/node\n" > "./0x08-making_change/$t"
+        touch "./0x08-making_change/$t"
     fi
 done
 
-echo -e "# ALX Programme Project: 0x01. Lockboxes" > "./0x01-lockboxes/README.md"
+echo -e "# ALX Programme Project: 0x08. Making Change" > "./0x08-making_change/README.md"
 
-echo -e "#!/bin/bash\ngit add . && git commit -m '0x01. Lockboxes' && git push"  > "./0x01-lockboxes/correction" && chmod +x "./0x01-lockboxes/correction"
+echo -e "#!/bin/bash\ngit add . && git commit -m '0x08. Making Change' && git push"  > "./0x08-making_change/correction" && chmod +x "./0x08-making_change/correction"
 
-cp "../alx-higher_level_programming/0x05-python-exceptions/clean_up_corrections" "./0x01-lockboxes/"
+cp "../alx-higher_level_programming/0x05-python-exceptions/clean_up_corrections" "./0x08-making_change/"
 
-cd ./0x01-lockboxes
+cd ./0x08-making_change
