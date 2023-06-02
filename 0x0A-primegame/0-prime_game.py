@@ -23,7 +23,7 @@ def isWinner(x, nums):
             continue
         for j in range(i + i, n + 1, i):
             primes[j - 1] = False
-    # filter the number of primes less than n in nums for each round
+
     for _, n in zip(range(x), nums):
         primes_count = len(list(filter(lambda x: x, primes[0: n])))
         bens_wins += primes_count % 2 == 0
