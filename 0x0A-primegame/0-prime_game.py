@@ -18,16 +18,16 @@ def sieve(n):
     return [i for i in range(n + 1) if primes[i]]
 
 
-def play_game(n):
+def play_game(n, primes):
     """
     Simulate a game where two players take turns choosing a prime number from
     a set of consecutive integers starting from 1 up to and including n. The
     player that cannot make a move loses the game.
     """
-    primes = sieve(n)
     turn = 0
-    while primes:
-        prime = primes.pop(0)
+    for prime in primes:
+        if prime > n:
+            break
         turn += 1
     if turn % 2 == 0:
         return "Ben"
@@ -41,10 +41,12 @@ def isWinner(x, nums):
     choosing a prime number from a set of consecutive integers starting from 1
     up to and including n. The player that cannot make a move loses the game.
     """
+    max_n = max(nums[:x])
+    primes = sieve(max_n)
     maria_wins = 0
     ben_wins = 0
-    for n in nums:
-        winner = play_game(n)
+    for n in nums[:x]:
+        winner = play_game(n, primes)
         if winner == "Maria":
             maria_wins += 1
         else:
