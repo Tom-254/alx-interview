@@ -25,7 +25,7 @@ def isWinner(x, nums):
             primes[j - 1] = False
 
     for _, n in zip(range(x), nums):
-        primes_count = len(list(filter(lambda x: x, primes[0: n])))
+        primes_count = sum(primes[0: n])
         bens_wins += primes_count % 2 == 0
         marias_wins += primes_count % 2 == 1
     if marias_wins == bens_wins:
